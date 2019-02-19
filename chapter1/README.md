@@ -187,6 +187,7 @@ Example:
 ```
 read var_name
 echo "Your name is: $var_name"
+echo "Your name is: ${var_name}"
 ```
 #### let and (())
 - Syntax: `let expression` or `((expression))`
@@ -205,14 +206,19 @@ fi
 - Description: `test` evaluates the expression and, if it valuates to true,
      returns a zero exit status, otherwise it returns 1.
 - [Action Item]: What is the difference between `[[ expression ]]` and `[ expression ]`?
+
+[ is POSIX; [[ is bash extension
+
+
 #### seq
 - Syntax: `seq number`
 - Description: Writes the sequence `1..number` to standard output (separated by newlines).
 - Example: `seq 3`
+
 #### for/while
 Let us explain the syntax of `for` and `while` loops with three examples.
 
-The first loop bewlo loops through every element in the current working directory.
+The first loop below loops through every element in the current working directory.
 
 ```
 #!/bin/bash
@@ -220,6 +226,12 @@ for i in $( ls ); do
   echo item: $i
 done
 ```
+
+save above script into file=for.sh. To execute it
+* source for.sh
+* bash for.sh
+* chmod a+x for.sh; ./for.sh
+
 Recall that `seq 8` returns as list from 1 to 8. We can use this as a counter in a loop.
 ```
 #!/bin/bash
@@ -228,7 +240,7 @@ do
         echo $i
 done    
 ```
-For the last example, note that `lt` in a test block (`[]`) evaluates to less than.
+For the following example, note that `lt` in a test block (`[]`) evaluates to less than. No space is allowed in let expression.
 ```
 #!/bin/bash
 COUNTER=0
@@ -304,6 +316,7 @@ print_my_argument Hello World
 ```
 #### Exercise
 - What happens when you run `print_my_argument` without any parameter?
+  - nothing is printed
 
 
 ### Return Values (or lack thereof)
@@ -326,6 +339,8 @@ If we run this script, then the output will
 3
 ```
 as this was the return code set by the function.
+
+_Question_: not working on ubuntu?
 
 ## Piping
 One of the key concepts of Bash is piping, Bash's version of function composition. Piping is a very powerful concept to concatenate multiple commands.
@@ -361,12 +376,18 @@ The `>` and `>>` can be used to redirect the output stream into a file.
 
 
 ### Exercises
-- Write a short script that, given two text files, concatenates them and writes the output to a file `merged.txt` in the working directory.
+- Write a short script that, given two text files, concatenates them and 
+writes the output to a file `merged.txt` in the working directory.
+  - `$ cat file1.txt file2.txt > merged.txt`
+
 - Given the files `lines.txt` in this directory, print out the 5th line using head and tail.
+  - `$ head -n 5 lines.text | tail -n 1`
+
 - Using `xargs` with the option `n`, finish the command `echo a b c d e f |` so that the output is: ```a b c
 d e f ```
 - Solve the following [10th Line](https://leetcode.com/problems/tenth-line/) exercise on Leetcode! Why does a simple solution based on `head` and `tail` not work?
   - Hint: One approach is to look at `mapfile` carefully.
+  - `cat file.txt | (mapfile; echo "${MAPFILE[9]}"|tr -d '\n'; )`
 - What does the following code snippet do?
 
 ```bash
